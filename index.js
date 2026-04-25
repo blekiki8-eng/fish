@@ -6,10 +6,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// проста "база" в памʼяті (пізніше замінимо на MongoDB)
+// проста памʼять (потім можна MongoDB)
 let users = {};
 
-// створити / отримати юзера
 function getUser(id){
   if(!users[id]){
     users[id] = {
@@ -21,41 +20,49 @@ function getUser(id){
   return users[id];
 }
 
-// health check
-app.get("/", (req, res) => {
-  res.send("🐟 Fish Cash API is running");
+app.get("/", (req,res)=>{
+  res.send("🐟 Fish Cash API running");
 });
 
-// отримати юзера
-app.post("/user", (req, res) => {
+// створення / отримання юзера
+app.post("/user", (req,res)=>{
   const { id } = req.body;
   res.json(getUser(id));
 });
 
-// рибалка
-app.post("/fish", (req, res) => {
+// гра "рибалка"
+app.post("/fish", (req,res)=>{
   const { id, bet, currency } = req.body;
 
   let u = getUser(id);
 
-  if (currency === "fc" && u.fc < bet)
-    return res.json({ error: "no fc" });
+  if(!bet || bet <= 0){
+    return res.json({ error:"bad bet" });
+  }
 
-  if (currency === "gc" && u.gc < bet)
-    return res.json({ error: "no gc" });
+  if(currency === "fc" && u.fc < bet){
+    return res.json({ error:"no fc" });
+  }
+
+  if(currency === "gc" && u.gc < bet){
+    return res.json({ error:"no gc" });
+  }
 
   let win = Math.random() > 0.5;
 
-  let result = win
-    ? ["🐟 Карась", "🐠 Короп", "🦈 Щука"][Math.floor(Math.random() * 3)]
-    : "🗑️ Сміття";
+  let fish = ["🐟 Карась", "🐠 Короп", "🦈 Щука"];
+  let trash = ["🗑️ Сміття"];
 
-  if (currency === "fc") {
+  let result = win
+    ? fish[Math.floor(Math.random() * fish.length)]
+    : trash[0];
+
+  if(currency === "fc"){
     u.fc -= bet;
-    if (win) u.fc += bet * 1.5;
+    if(win) u.fc += bet * 1.5;
   } else {
     u.gc -= bet;
-    if (win) u.gc += bet * 1.5;
+    if(win) u.gc += bet * 1.5;
   }
 
   res.json({
@@ -68,6 +75,6 @@ app.post("/fish", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log("Server running on", PORT);
+app.listen(PORT, ()=>{
+  console.log("Fish Cash running on", PORT);
 });
