@@ -8,87 +8,91 @@
 
 <style>
 body {
-  margin: 0;
-  font-family: Arial;
-  background: #0f172a;
-  color: white;
+  margin:0;
+  font-family:Arial;
+  background:#0f172a;
+  color:white;
 }
 
 .header {
-  text-align: center;
-  padding: 15px;
-  font-size: 20px;
+  text-align:center;
+  padding:15px;
+  font-size:22px;
+  font-weight:bold;
 }
 
 .card {
-  padding: 15px;
-  background: #1e293b;
-  margin: 10px;
-  border-radius: 10px;
+  background:#1e293b;
+  margin:10px;
+  padding:15px;
+  border-radius:10px;
+}
+
+button {
+  margin-top:10px;
+  padding:10px;
 }
 </style>
 </head>
 
 <body>
 
-<h2 class="header">🐟 Fish Cash</h2>
-
+<div class="header">🐟 Fish Cash</div>
 <div id="app"></div>
 
 <script>
 const tg = window.Telegram.WebApp;
-
 tg.ready();
 tg.expand();
 
-const API = "https://fffg-production.up.railway.app";
+const API = "https://YOUR-RAILWAY-URL";
 
 const userId = tg.initDataUnsafe?.user?.id || "test";
 
 let fc = 0;
 let gc = 0;
 
-// load user
-async function load(){
+// LOAD USER
+async function loadUser(){
   let res = await fetch(API + "/user", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
     body: JSON.stringify({id:userId})
   });
 
   let data = await res.json();
-
   fc = data.fc;
   gc = data.gc;
 
   profile();
 }
 
-// profile
+// PROFILE
 function profile(){
   document.getElementById("app").innerHTML = `
     <div class="card">
-      <b>👤 Profile</b><br><br>
+      <h3>👤 Profile</h3>
       ID: ${userId}<br><br>
       💰 FC: ${fc}<br>
       💎 GC: ${gc}<br><br>
 
-      <button onclick="fishing()">Fishing</button>
+      <button onclick="fishing()">🎣 Fishing</button>
+      <button onclick="donate()">💰 Donate</button>
     </div>
   `;
 }
 
-// fishing
+// FISHING
 function fishing(){
   document.getElementById("app").innerHTML = `
     <div class="card">
-      <b>🎣 Fishing</b><br><br>
+      <h3>🎣 Fishing</h3>
 
       <input id="bet" type="number" value="10"><br><br>
 
       <select id="cur">
-        <option value="fc">FC</option>
-        <option value="gc">GC</option>
+        <option value="fc">Fish Coin</option>
+        <option value="gc">Gold Coin</option>
       </select><br><br>
 
       <button onclick="go()">Fish</button>
@@ -97,14 +101,14 @@ function fishing(){
   `;
 }
 
-// play
+// GAME
 async function go(){
   let bet = +document.getElementById("bet").value;
   let cur = document.getElementById("cur").value;
 
   let res = await fetch(API + "/fish", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
     body: JSON.stringify({
       id:userId,
       bet,
@@ -127,7 +131,18 @@ async function go(){
   profile();
 }
 
-load();
+// DONATE
+function donate(){
+  document.getElementById("app").innerHTML = `
+    <div class="card">
+      <h3>💰 Donate</h3>
+      Soon...
+      <button onclick="profile()">Back</button>
+    </div>
+  `;
+}
+
+loadUser();
 </script>
 
 </body>
