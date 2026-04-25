@@ -1,5 +1,5 @@
 {
-  "name": "fish-cash-bot",
+  "name": "test-bot",
   "version": "1.0.0",
   "main": "bot.js",
   "scripts": {
@@ -7,16 +7,5 @@
   },
   "dependencies": {
     "node-telegram-bot-api": "^0.64.0"
-  }
-}
-{
-  "name": "fish-cash-api",
-  "version": "1.0.0",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
   }
 }
