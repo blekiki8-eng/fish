@@ -6,11 +6,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// memory DB
 let users = {};
 
 function getUser(id){
   if(!users[id]){
-    users[id] = { fc: 100, gc: 10 };
+    users[id] = { fc:100, gc:10 };
   }
   return users[id];
 }
@@ -20,21 +21,21 @@ app.get("/", (req,res)=>{
 });
 
 // user
-app.post("/user", (req,res)=>{
+app.post("/user",(req,res)=>{
   const { id } = req.body;
   res.json(getUser(id));
 });
 
-// fish game
-app.post("/fish", (req,res)=>{
+// fishing game
+app.post("/fish",(req,res)=>{
   const { id, bet, currency } = req.body;
 
   let u = getUser(id);
 
-  if(currency === "fc" && u.fc < bet)
+  if(currency==="fc" && u.fc < bet)
     return res.json({ error:"no fc" });
 
-  if(currency === "gc" && u.gc < bet)
+  if(currency==="gc" && u.gc < bet)
     return res.json({ error:"no gc" });
 
   let win = Math.random() > 0.5;
@@ -43,7 +44,7 @@ app.post("/fish", (req,res)=>{
     ? ["🐟 Карась","🐠 Короп","🦈 Щука"][Math.floor(Math.random()*3)]
     : "🗑️ Сміття";
 
-  if(currency === "fc"){
+  if(currency==="fc"){
     u.fc -= bet;
     if(win) u.fc += bet * 1.5;
   } else {
@@ -62,5 +63,5 @@ app.post("/fish", (req,res)=>{
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, ()=>{
-  console.log("API running on", PORT);
+  console.log("Fish Cash API running on", PORT);
 });
