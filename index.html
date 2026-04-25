@@ -13,22 +13,29 @@ body{
   color:white;
 }
 
+.header{
+  text-align:center;
+  padding:15px;
+  font-size:22px;
+}
+
 .card{
   margin:10px;
   padding:15px;
   background:#1e293b;
   border-radius:10px;
 }
+
 button{
-  margin-top:10px;
   padding:10px;
+  margin-top:10px;
 }
 </style>
 </head>
 
 <body>
 
-<h3 style="text-align:center">🐟 Fish Cash</h3>
+<div class="header">🐟 Fish Cash</div>
 <div id="app"></div>
 
 <script>
@@ -43,6 +50,7 @@ const userId = tg.initDataUnsafe?.user?.id || "test";
 let fc = 0;
 let gc = 0;
 
+// load user
 async function load(){
   let res = await fetch(API + "/user", {
     method:"POST",
@@ -58,6 +66,7 @@ async function load(){
   profile();
 }
 
+// PROFILE
 function profile(){
   document.getElementById("app").innerHTML = `
     <div class="card">
@@ -66,10 +75,12 @@ function profile(){
       💎 GC: ${gc}<br><br>
 
       <button onclick="fishing()">🎣 Fishing</button>
+      <button onclick="donate()">💰 Donate</button>
     </div>
   `;
 }
 
+// FISHING
 function fishing(){
   document.getElementById("app").innerHTML = `
     <div class="card">
@@ -88,6 +99,7 @@ function fishing(){
   `;
 }
 
+// GAME
 async function go(){
   let bet = +document.getElementById("bet").value;
   let cur = document.getElementById("cur").value;
@@ -115,6 +127,17 @@ async function go(){
   alert(data.result + (data.win ? " WIN x1.5" : " LOSE"));
 
   profile();
+}
+
+// DONATE
+function donate(){
+  document.getElementById("app").innerHTML = `
+    <div class="card">
+      💰 Donate system soon...
+      <br><br>
+      <button onclick="profile()">Back</button>
+    </div>
+  `;
 }
 
 load();
