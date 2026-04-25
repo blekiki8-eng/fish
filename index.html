@@ -3,32 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body {
+body{
   margin:0;
   font-family:Arial;
   background:#0f172a;
   color:white;
 }
 
-.header {
-  text-align:center;
-  padding:15px;
-  font-size:22px;
-  font-weight:bold;
-}
-
-.card {
-  background:#1e293b;
+.card{
   margin:10px;
   padding:15px;
+  background:#1e293b;
   border-radius:10px;
 }
-
-button {
+button{
   margin-top:10px;
   padding:10px;
 }
@@ -37,7 +28,7 @@ button {
 
 <body>
 
-<div class="header">🐟 Fish Cash</div>
+<h3 style="text-align:center">🐟 Fish Cash</h3>
 <div id="app"></div>
 
 <script>
@@ -52,8 +43,7 @@ const userId = tg.initDataUnsafe?.user?.id || "test";
 let fc = 0;
 let gc = 0;
 
-// LOAD USER
-async function loadUser(){
+async function load(){
   let res = await fetch(API + "/user", {
     method:"POST",
     headers:{"Content-Type":"application/json"},
@@ -61,28 +51,25 @@ async function loadUser(){
   });
 
   let data = await res.json();
+
   fc = data.fc;
   gc = data.gc;
 
   profile();
 }
 
-// PROFILE
 function profile(){
   document.getElementById("app").innerHTML = `
     <div class="card">
-      <h3>👤 Profile</h3>
-      ID: ${userId}<br><br>
+      👤 ID: ${userId}<br><br>
       💰 FC: ${fc}<br>
       💎 GC: ${gc}<br><br>
 
       <button onclick="fishing()">🎣 Fishing</button>
-      <button onclick="donate()">💰 Donate</button>
     </div>
   `;
 }
 
-// FISHING
 function fishing(){
   document.getElementById("app").innerHTML = `
     <div class="card">
@@ -91,8 +78,8 @@ function fishing(){
       <input id="bet" type="number" value="10"><br><br>
 
       <select id="cur">
-        <option value="fc">Fish Coin</option>
-        <option value="gc">Gold Coin</option>
+        <option value="fc">FC</option>
+        <option value="gc">GC</option>
       </select><br><br>
 
       <button onclick="go()">Fish</button>
@@ -101,7 +88,6 @@ function fishing(){
   `;
 }
 
-// GAME
 async function go(){
   let bet = +document.getElementById("bet").value;
   let cur = document.getElementById("cur").value;
@@ -131,18 +117,7 @@ async function go(){
   profile();
 }
 
-// DONATE
-function donate(){
-  document.getElementById("app").innerHTML = `
-    <div class="card">
-      <h3>💰 Donate</h3>
-      Soon...
-      <button onclick="profile()">Back</button>
-    </div>
-  `;
-}
-
-loadUser();
+load();
 </script>
 
 </body>
