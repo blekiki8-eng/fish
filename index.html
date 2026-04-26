@@ -6,29 +6,50 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#0f172a;
-  color:white;
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
 }
 
-.header{
-  text-align:center;
-  padding:15px;
-  font-size:22px;
+.header {
+  text-align: center;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.card{
-  margin:10px;
-  padding:15px;
-  background:#1e293b;
-  border-radius:10px;
+.container {
+  padding: 20px;
+  padding-bottom: 80px;
 }
 
-button{
-  padding:10px;
-  margin-top:10px;
+.card {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  background: #1e293b;
+}
+
+.nav button {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 14px;
+}
+
+.nav button.active {
+  background: #334155;
 }
 </style>
 </head>
@@ -36,111 +57,64 @@ button{
 <body>
 
 <div class="header">🐟 Fish Cash</div>
-<div id="app"></div>
+
+<div class="container" id="app"></div>
+
+<div class="nav">
+  <button id="btnProfile" onclick="profile()">Profile</button>
+  <button id="btnFishing" onclick="fishing()">Fishing</button>
+  <button id="btnDonate" onclick="donate()">Donate</button>
+</div>
 
 <script>
 const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-const API = "https://YOUR-RAILWAY-URL";
-
-const userId = tg.initDataUnsafe?.user?.id || "test";
-
-let fc = 0;
-let gc = 0;
-
-// load user
-async function load(){
-  let res = await fetch(API + "/user", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({id:userId})
-  });
-
-  let data = await res.json();
-
-  fc = data.fc;
-  gc = data.gc;
-
-  profile();
+function setActive(id){
+  document.querySelectorAll(".nav button")
+    .forEach(b => b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
 // PROFILE
 function profile(){
+  setActive("btnProfile");
+
   document.getElementById("app").innerHTML = `
     <div class="card">
-      👤 ID: ${userId}<br><br>
-      💰 FC: ${fc}<br>
-      💎 GC: ${gc}<br><br>
-
-      <button onclick="fishing()">🎣 Fishing</button>
-      <button onclick="donate()">💰 Donate</button>
+      👤 Profile<br><br>
+      Тут буде профіль
     </div>
   `;
 }
 
 // FISHING
 function fishing(){
+  setActive("btnFishing");
+
   document.getElementById("app").innerHTML = `
     <div class="card">
-      <h3>🎣 Fishing</h3>
-
-      <input id="bet" type="number" value="10"><br><br>
-
-      <select id="cur">
-        <option value="fc">FC</option>
-        <option value="gc">GC</option>
-      </select><br><br>
-
-      <button onclick="go()">Fish</button>
-      <button onclick="profile()">Back</button>
+      🎣 Fishing<br><br>
+      Тут буде рибалка
     </div>
   `;
-}
-
-// GAME
-async function go(){
-  let bet = +document.getElementById("bet").value;
-  let cur = document.getElementById("cur").value;
-
-  let res = await fetch(API + "/fish", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({
-      id:userId,
-      bet,
-      currency:cur
-    })
-  });
-
-  let data = await res.json();
-
-  if(data.error){
-    alert("Not enough money");
-    return;
-  }
-
-  fc = data.fc;
-  gc = data.gc;
-
-  alert(data.result + (data.win ? " WIN x1.5" : " LOSE"));
-
-  profile();
 }
 
 // DONATE
 function donate(){
+  setActive("btnDonate");
+
   document.getElementById("app").innerHTML = `
     <div class="card">
-      💰 Donate system soon...
-      <br><br>
-      <button onclick="profile()">Back</button>
+      💰 Donate<br><br>
+      Тут буде донат
     </div>
   `;
 }
 
-load();
+// старт
+profile();
 </script>
 
 </body>
