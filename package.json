@@ -1,13 +1,11 @@
 {
-  "name": "fish-cash",
+  "name": "fish-cash-bot",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "bot.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node bot.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
     "node-telegram-bot-api": "^0.64.0"
   }
 }
