@@ -1,17 +1,19 @@
 const TelegramBot = require("node-telegram-bot-api");
 
-// 🔴 ВСТАВ СЮДИ СВІЙ ТОКЕН
-const TOKEN = "YOUR_BOT_TOKEN";
+// беремо токен з Variables (Railway)
+const TOKEN = process.env.BOT_TOKEN;
 
+// створюємо бота
 const bot = new TelegramBot(TOKEN, { polling: true });
 
-// 🔴 ВСТАВ СЮДИ СВІЙ WEB APP URL (ОБОВʼЯЗКОВО HTTPS)
-const WEBAPP_URL = "https://your-site.com";
+// 🔴 ВСТАВ СЮДИ СВІЙ WEBAPP ЛІНК (https)
+const WEBAPP_URL = "https://your-webapp-url.com";
 
+// /start команда
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
 
-  bot.sendMessage(chatId, "🐟 Fish Cash", {
+  bot.sendMessage(chatId, "🎣 Велком до риболовлі!", {
     reply_markup: {
       keyboard: [
         [
@@ -26,9 +28,9 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
-// тест щоб перевірити що бот живий
+// тест — щоб бачити що бот живий
 bot.on("message", (msg) => {
-  if (msg.text === "hi") {
-    bot.sendMessage(msg.chat.id, "Бот працює ✅");
+  if (msg.text === "ping") {
+    bot.sendMessage(msg.chat.id, "pong ✅");
   }
 });
